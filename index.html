@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Chatbot</title>
+</head>
+<body>
+    <h1>Medical Chatbot</h1>
+    <input type="text" id="query" placeholder="Ask a medical question">
+    <button onclick="sendQuery()">Send</button>
+    <p id="response"></p>
+
+    <script>
+        async function sendQuery() {
+            const query = document.getElementById('query').value;
+            const responseElement = document.getElementById('response');
+
+            const response = await fetch('/webhook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    session: 'test-session',
+                    queryResult: { queryText: query }
+                })
+            });
+
+            const data = await response.json();
+            responseElement.innerText = data.fulfillmentText;
+        }
+    </script>
+</body>
+</html>
